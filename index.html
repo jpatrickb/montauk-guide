@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Montauk · The End — An Explorer's Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1D26;        /* night ocean */
+    --ink-2:#0F2731;      /* slightly lifted */
+    --deep:#163742;       /* panel slate */
+    --beam:#F0B95C;       /* lighthouse amber — the signature accent */
+    --rose:#E2917A;       /* sunset coral — used sparingly */
+    --sand:#D6C09E;       /* weathered driftwood */
+    --foam:#EAF0ED;       /* foam white */
+    --mute:#8AA1A6;       /* sea-grey */
+    --line:rgba(214,192,158,0.22);
+    --shadow:0 18px 50px -22px rgba(0,0,0,0.7);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--foam);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px;}
+  .mono{font-family:'Space Mono',monospace;letter-spacing:0.04em;}
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:0.7rem;letter-spacing:0.28em;text-transform:uppercase;
+    color:var(--beam);
+  }
+  h2{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.05;margin:0;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    min-height:96vh;
+    display:flex;align-items:flex-end;
+    overflow:hidden;
+    background:
+      radial-gradient(120% 90% at 50% 120%, #21495b 0%, var(--ink-2) 42%, var(--ink) 78%);
+    isolation:isolate;
+  }
+  /* star field */
+  .stars{position:absolute;inset:0;z-index:0;opacity:0.5;}
+  .stars span{position:absolute;width:2px;height:2px;border-radius:50%;background:#cfe0e2;opacity:0.6;animation:tw 4s ease-in-out infinite;}
+  @keyframes tw{0%,100%{opacity:.18}50%{opacity:.8}}
+
+  /* rotating lighthouse beam — the signature */
+  .beam-stage{position:absolute;left:50%;bottom:38px;width:1px;height:1px;z-index:1;pointer-events:none;}
+  .beam{
+    position:absolute;left:-900px;top:-900px;width:1800px;height:1800px;border-radius:50%;
+    background:conic-gradient(from -8deg,
+      rgba(240,185,92,0) 0deg,
+      rgba(240,185,92,0.16) 5deg,
+      rgba(240,185,92,0.30) 8deg,
+      rgba(240,185,92,0.05) 16deg,
+      rgba(240,185,92,0) 26deg,
+      rgba(240,185,92,0) 360deg);
+    animation:sweep 11s linear infinite;
+    mix-blend-mode:screen;
+    filter:blur(1px);
+  }
+  @keyframes sweep{to{transform:rotate(360deg);}}
+  .lamp{
+    position:absolute;left:-9px;top:-9px;width:18px;height:18px;border-radius:50%;
+    background:radial-gradient(circle,#fff 0%,var(--beam) 45%,rgba(240,185,92,0) 72%);
+    animation:flash 5s ease-in-out infinite; z-index:3;
+  }
+  @keyframes flash{0%,86%,100%{opacity:.55;transform:scale(.9)}92%{opacity:1;transform:scale(1.35)}}
+
+  /* lighthouse silhouette */
+  .light{position:absolute;left:50%;bottom:0;transform:translateX(-50%);z-index:2;width:120px;height:auto;}
+  .horizon{position:absolute;left:0;right:0;bottom:0;height:42%;z-index:1;
+    background:linear-gradient(180deg,rgba(11,29,38,0) 0%,rgba(11,29,38,0.65) 55%,var(--ink) 100%);}
+
+  .hero-copy{position:relative;z-index:4;padding-bottom:120px;width:100%;}
+  .hero-tag{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
+  .pill{border:1px solid var(--line);border-radius:100px;padding:5px 12px;font-size:0.66rem;}
+  .title{
+    font-family:'Fraunces',Georgia,serif;font-weight:900;
+    font-size:clamp(3.6rem,17vw,8.5rem);line-height:0.84;letter-spacing:-0.02em;
+    margin:0;text-wrap:balance;
+  }
+  .title .end{display:block;color:var(--beam);font-style:italic;font-weight:500;
+    font-size:clamp(1.1rem,5vw,1.9rem);letter-spacing:0.02em;margin-top:18px;}
+  .lede{max-width:30em;color:#d4ddda;font-size:clamp(1rem,2.4vw,1.18rem);margin:22px 0 0;}
+  .scrollcue{margin-top:30px;font-size:0.7rem;color:var(--mute);display:flex;align-items:center;gap:9px;}
+  .scrollcue::before{content:"";width:34px;height:1px;background:var(--sand);opacity:.6;}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:78px 0;position:relative;}
+  .sec-head{margin-bottom:38px;}
+  .sec-head h2{font-size:clamp(1.9rem,5vw,2.9rem);margin-top:10px;}
+  .sec-head p{color:var(--mute);max-width:42em;margin:14px 0 0;}
+
+  /* ---------- TIMELINE ---------- */
+  .story{background:linear-gradient(180deg,var(--ink) 0%,var(--ink-2) 100%);}
+  .years{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 16px;scrollbar-width:thin;scroll-snap-type:x mandatory;}
+  .years::-webkit-scrollbar{height:6px;}
+  .years::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;}
+  .yr{
+    flex:0 0 auto;scroll-snap-align:start;cursor:pointer;border:1px solid var(--line);
+    background:transparent;color:var(--foam);border-radius:12px;padding:13px 16px;text-align:left;
+    min-width:118px;transition:border-color .25s,background .25s,transform .25s;font-family:inherit;
+  }
+  .yr .y{font-family:'Space Mono',monospace;font-size:1.15rem;font-weight:700;color:var(--sand);}
+  .yr .l{display:block;font-size:0.72rem;color:var(--mute);margin-top:4px;line-height:1.3;}
+  .yr:hover{border-color:var(--sand);transform:translateY(-2px);}
+  .yr[aria-selected="true"]{background:var(--beam);border-color:var(--beam);}
+  .yr[aria-selected="true"] .y{color:#10242c;}
+  .yr[aria-selected="true"] .l{color:#2c1c08;}
+  .yr:focus-visible{outline:2px solid var(--beam);outline-offset:3px;}
+
+  .detail{
+    margin-top:26px;border:1px solid var(--line);border-radius:18px;padding:30px;
+    background:var(--ink);box-shadow:var(--shadow);min-height:160px;
+  }
+  .detail .d-year{font-family:'Space Mono',monospace;color:var(--beam);font-size:0.8rem;letter-spacing:0.14em;}
+  .detail h3{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(1.4rem,4vw,2rem);margin:8px 0 12px;line-height:1.1;}
+  .detail p{margin:0;color:#cfd9d6;max-width:48em;}
+  .fade{animation:rise .45s ease both;}
+  @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ---------- EXPLORE ---------- */
+  .filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:30px;}
+  .chip{
+    border:1px solid var(--line);background:transparent;color:var(--foam);
+    font-family:'Space Mono',monospace;font-size:0.73rem;letter-spacing:0.06em;
+    padding:9px 15px;border-radius:100px;cursor:pointer;transition:.22s;
+  }
+  .chip:hover{border-color:var(--sand);}
+  .chip[aria-pressed="true"]{background:var(--foam);color:var(--ink);border-color:var(--foam);}
+  .chip:focus-visible{outline:2px solid var(--beam);outline-offset:3px;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:16px;}
+  .card{
+    border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--ink-2);
+    display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;
+    transition:transform .25s,border-color .25s;animation:rise .4s ease both;
+  }
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--cat,var(--sand));opacity:.8;}
+  .card:hover{transform:translateY(-4px);border-color:var(--sand);}
+  .card .ct{font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--cat,var(--sand));}
+  .card h4{font-family:'Fraunces',serif;font-weight:600;font-size:1.18rem;margin:0;line-height:1.15;}
+  .card p{margin:0;color:#c4cfcc;font-size:0.9rem;line-height:1.5;}
+  .card .tag{margin-top:auto;align-self:flex-start;font-family:'Space Mono',monospace;font-size:0.62rem;
+    letter-spacing:0.08em;border:1px solid var(--line);border-radius:6px;padding:4px 8px;color:var(--mute);}
+  .count{font-family:'Space Mono',monospace;color:var(--mute);font-size:0.74rem;margin-bottom:18px;}
+
+  /* ---------- LOCALS ---------- */
+  .locals{background:var(--ink-2);}
+  .locals .quote{font-family:'Fraunces',serif;font-weight:500;font-style:italic;
+    font-size:clamp(1.3rem,4.2vw,2.1rem);line-height:1.3;max-width:18em;color:var(--foam);}
+  .locals .quote span{color:var(--beam);}
+  .l-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px;margin-top:36px;}
+  .l-grid div h5{font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.12em;color:var(--sand);text-transform:uppercase;margin:0 0 6px;}
+  .l-grid div p{margin:0;color:#c4cfcc;font-size:0.92rem;}
+
+  /* ---------- FOOTER / PLAN ---------- */
+  footer{background:var(--ink);border-top:1px solid var(--line);}
+  .plan{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;margin-top:30px;border:1px solid var(--line);border-radius:16px;overflow:hidden;}
+  .step{padding:22px;border-right:1px solid var(--line);}
+  .step:last-child{border-right:none;}
+  .step .t{font-family:'Space Mono',monospace;color:var(--beam);font-size:0.72rem;letter-spacing:0.08em;}
+  .step .a{font-family:'Fraunces',serif;font-size:1.05rem;margin-top:8px;line-height:1.2;}
+  .foot-note{color:var(--mute);font-size:0.8rem;margin-top:30px;max-width:46em;}
+  .foot-note b{color:var(--sand);font-weight:600;}
+
+  @media(max-width:560px){
+    .hero-copy{padding-bottom:96px;}
+    section{padding:60px 0;}
+    .detail{padding:22px;}
+    .plan{grid-template-columns:1fr;}
+    .step{border-right:none;border-bottom:1px solid var(--line);}
+    .step:last-child{border-bottom:none;}
+  }
+  @media(prefers-reduced-motion:reduce){
+    .beam{animation:none;opacity:.22;}
+    .lamp{animation:none;opacity:.9;}
+    .stars span{animation:none;}
+    .fade,.card{animation:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="stars" id="stars" aria-hidden="true"></div>
+  <div class="horizon" aria-hidden="true"></div>
+  <div class="beam-stage" aria-hidden="true">
+    <div class="beam"></div>
+    <div class="lamp"></div>
+  </div>
+  <svg class="light" viewBox="0 0 120 220" aria-hidden="true">
+    <defs><linearGradient id="lh" x1="0" x2="1"><stop offset="0" stop-color="#1c3c47"/><stop offset="1" stop-color="#0d242c"/></linearGradient></defs>
+    <rect x="50" y="58" width="20" height="14" rx="2" fill="#33485020"/>
+    <polygon points="46,72 74,72 70,200 50,200" fill="url(#lh)" stroke="#2b4853" stroke-width="1"/>
+    <rect x="50" y="96" width="20" height="20" fill="#0b1d26"/>
+    <rect x="50" y="136" width="20" height="20" fill="#0b1d26"/>
+    <polygon points="52,56 68,56 64,40 56,40" fill="#16323d"/>
+    <rect x="53" y="34" width="14" height="8" rx="2" fill="#0b1d26" stroke="#2b4853"/>
+    <polygon points="50,34 70,34 60,22" fill="#16323d"/>
+    <rect x="40" y="200" width="40" height="20" fill="#0c222a"/>
+  </svg>
+
+  <div class="wrap hero-copy">
+    <div class="hero-tag">
+      <span class="eyebrow">The End · Long Island, NY</span>
+    </div>
+    <div class="hero-tag" style="gap:8px;">
+      <span class="pill mono">41.0708° N</span>
+      <span class="pill mono">71.8573° W</span>
+      <span class="pill mono">EASTERNMOST POINT · NEW YORK</span>
+    </div>
+    <h1 class="title">Montauk
+      <span class="end">— where Long Island runs out of land</span>
+    </h1>
+    <p class="lede">A four-century fishing town that became a moorland resort, a wartime fortress, and a bohemian hideaway — all on one windswept point. Tap through its story, then build your day.</p>
+    <div class="scrollcue mono">SCROLL TO EXPLORE</div>
+  </div>
+</header>
+
+<!-- TIMELINE -->
+<section class="story">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">How the point came to be</span>
+      <h2>A town built in chapters</h2>
+      <p>Montauk wasn't planned so much as layered — by the Montaukett who named it, a lighthouse George Washington signed off on, a railroad baron's failed port, a developer's gilded dream, and a war. Tap a year.</p>
+    </div>
+    <div class="years" id="years" role="tablist" aria-label="Montauk timeline"></div>
+    <div class="detail" id="detail" role="tabpanel" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- EXPLORE -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">25 ways to spend the day</span>
+      <h2>Explore the point</h2>
+      <p>Filter by what you're in the mood for. Everything here is a real local favorite — from the oldest lighthouse in the state to the clam shack you'll pass on the way in.</p>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filter places"></div>
+    <div class="count mono" id="count"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- LOCALS -->
+<section class="locals">
+  <div class="wrap">
+    <span class="eyebrow">What locals protect</span>
+    <p class="quote">Montauk fought to keep its <span>salt</span> while the Hamptons crept east. The real one is fishermen at dawn and surfers at dusk.</p>
+    <div class="l-grid">
+      <div><h5>The mom-and-pops</h5><p>Most of Main Street is still small, family-run shops — not chains. Locals guard that fiercely.</p></div>
+      <div><h5>Fish off the boat</h5><p>Home to New York's largest fishing fleet. You can buy what was landed that morning, right at the docks.</p></div>
+      <div><h5>The off-season</h5><p>~4,000 year-round residents; ~30,000 in summer. Many love October best — empty beaches, seals on the rocks.</p></div>
+      <div><h5>Sunset as ritual</h5><p>The Montauket dive bar over Fort Pond Bay is the unofficial town gathering. Get there early.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLAN -->
+<footer>
+  <section style="padding-bottom:84px;">
+    <div class="wrap">
+      <span class="eyebrow">A day-trip flow for two</span>
+      <h2 style="font-size:clamp(1.7rem,4.5vw,2.5rem);margin-top:10px;">From the Lab, head east on 27 (~1.5–2 hrs)</h2>
+      <div class="plan">
+        <div class="step"><div class="t">LATE MORNING</div><div class="a">Lighthouse &amp; Camp Hero at the Point</div></div>
+        <div class="step"><div class="t">LUNCH</div><div class="a">Gosman's Dock or Inlet Seafood on the harbor</div></div>
+        <div class="step"><div class="t">AFTERNOON</div><div class="a">Walk Shadmoor's bluffs to Ditch Plains</div></div>
+        <div class="step"><div class="t">GOLDEN HOUR</div><div class="a">Sunset drinks at the Montauket or Duryea's</div></div>
+      </div>
+      <p class="foot-note">On the way out you'll cross the <b>Napeague Stretch</b> — a thin ribbon of dune with water on both sides. Two classic seafood shacks sit nearly across from each other there (The Lobster Roll "LUNCH" and Clam Bar at Napeague), both worth a stop. Note: many beaches need an East Hampton parking permit in season — walking or biking in dodges that. Built from research for your day in <b>The End</b>.</p>
+    </div>
+  </section>
+</footer>
+
+<script>
+  /* ---- star field ---- */
+  (function(){
+    const s=document.getElementById('stars');let h='';
+    for(let i=0;i<46;i++){h+=`<span style="left:${Math.random()*100}%;top:${Math.random()*70}%;animation-delay:${(Math.random()*4).toFixed(2)}s"></span>`;}
+    s.innerHTML=h;
+  })();
+
+  /* ---- timeline ---- */
+  const timeline=[
+    {y:"1614",l:"Point of the Fishers",t:"First named",d:"Dutch explorer Adriaen Block sails past the tip and names it Hoeck van de Visschers — 'Point of the Fishers.' The Montaukett people are already here; the very name Montauk comes from their Algonquian language. Their prized wampum (shell beads) functions as currency across the region."},
+    {y:"1658",l:"America's oldest ranch",t:"Open pasture begins",d:"East Hampton settlers begin using the whole peninsula as open summer pasture for cattle, sheep and horses — a practice that lasts nearly two centuries. Deep Hollow Ranch dates from this era and claims to be the oldest cattle ranch in the United States. You can still ride horses on the beach here."},
+    {y:"1796",l:"The lighthouse",t:"The oldest institution",d:"Authorized by Congress in 1792 — George Washington approved the spending, Thomas Jefferson signed off — the Montauk Point Lighthouse is completed. It's the oldest lighthouse in New York State and fourth-oldest in the nation. Its beam still flashes every five seconds, visible 19 nautical miles out. It predates every club, restaurant and deal in the Hamptons."},
+    {y:"1879",l:"Benson buys the point",t:"One owner, 10,000 acres",d:"Brooklyn's Arthur Benson buys roughly 10,000 acres of Montauk for $151,000. Architect Stanford White designs seven Shingle-style 'cottages' — the Montauk Association houses — as a private enclave. It's the first turn from common grazing land toward a destination."},
+    {y:"1895",l:"The railroad arrives",t:"The failed transatlantic port",d:"The Long Island Rail Road extends its line all the way to Montauk. The grand scheme: make Fort Pond Bay a port of entry where ocean liners dock and passengers train into the city, shortening the Atlantic crossing. The bay proved too shallow and the dream never landed — but the railroad stayed, and so did the fishermen it brought."},
+    {y:"1926",l:"Miami Beach of the North",t:"Carl Fisher's gilded dream",d:"Carl Fisher — the man who built Miami Beach — buys the east end with a slogan that sounds like destiny: 'Miami Beach in the winter, Montauk Point in the summer.' In barely two years he builds the Tudor Montauk Manor, a yacht club, a golf course, and a seven-story office tower (then Long Island's tallest), and dynamites an inlet to create today's harbor. The 1929 crash ends it — but the buildings remain."},
+    {y:"1942",l:"Camp Hero",t:"The disguised fortress",d:"During WWII the Navy buys most of the east end; the Army builds Camp Hero with 16-inch guns guarding New York's shipping lanes. The base buildings are disguised to look from above like a sleepy New England fishing village. Its giant radar tower and bunkers still stand — and later inspired the 'Montauk Project' lore behind Stranger Things."},
+    {y:"1951",l:"Monster fishing",t:"The Jaws connection",d:"Charter captain Frank Mundus starts running trips out of Lake Montauk and discovers shark fishing is the real draw. 'Monster fishing' becomes the town's signature, and Mundus becomes a real-life inspiration for Jaws. Montauk now claims more world saltwater fishing records than any port on earth."},
+    {y:"1975",l:"Stones & Warhol",t:"On the map",d:"Andy Warhol's oceanfront compound (named Eothen, Greek for 'at first light') hosts everyone from Jackie Kennedy to Lennon. The Rolling Stones rent it while prepping a tour; Jagger writes 'Memory Motel' about a woman he met at the only bar in town with a piano. As Warhol put it: 'Mick Jagger really put Montauk on the map.' The Memory Motel still stands."}
+  ];
+  const yearsEl=document.getElementById('years'),detailEl=document.getElementById('detail');
+  function renderDetail(i){
+    const e=timeline[i];
+    detailEl.classList.remove('fade');void detailEl.offsetWidth;detailEl.classList.add('fade');
+    detailEl.innerHTML=`<div class="d-year mono">${e.y} · ${e.t}</div><h3>${e.l}</h3><p>${e.d}</p>`;
+  }
+  timeline.forEach((e,i)=>{
+    const b=document.createElement('button');
+    b.className='yr';b.setAttribute('role','tab');b.setAttribute('aria-selected',i===0?'true':'false');
+    b.innerHTML=`<span class="y">${e.y}</span><span class="l">${e.l}</span>`;
+    b.addEventListener('click',()=>{
+      yearsEl.querySelectorAll('.yr').forEach(x=>x.setAttribute('aria-selected','false'));
+      b.setAttribute('aria-selected','true');renderDetail(i);
+    });
+    yearsEl.appendChild(b);
+  });
+  renderDetail(0);
+
+  /* ---- places ---- */
+  const cats={
+    sights:{label:"Sights & photo spots",color:"#F0B95C"},
+    nature:{label:"Nature & gardens",color:"#7FB8A0"},
+    food:{label:"Food & drink",color:"#E2917A"},
+    do:{label:"Get out there",color:"#9DB6CE"}
+  };
+  const places=[
+    {c:"sights",n:"Montauk Point Lighthouse",t:"EST. 1796",d:"Climb 137 iron steps to the top, then tour the maritime museum. The literal End of the World."},
+    {c:"sights",n:"Camp Hero State Park",t:"WWII",d:"Bluff trails, concrete bunkers and the massive abandoned radar tower. Atmospheric and a little eerie."},
+    {c:"sights",n:"The Montauket",t:"SUNSET",d:"Cliff-top dive bar over Fort Pond Bay — arguably the best sunset in town, drink in hand. Get there early."},
+    {c:"sights",n:"Montauk Harbor & Gosman's Dock",t:"HARBOR",d:"Watch the working fishing fleet come and go. The most quintessentially Montauk waterfront."},
+    {c:"sights",n:"The Walking Dunes",t:"PHOTO",d:"Wind-sculpted, slowly shifting sand dunes on the northeast edge of Hither Hills. Surreal and photogenic."},
+    {c:"sights",n:"Montauk Manor & Fisher's Tower",t:"EST. 1927",d:"Carl Fisher's Tudor-Revival manor and seven-story tower — the 1920s bones of the modern town."},
+    {c:"sights",n:"Memory Motel",t:"1975",d:"Grab a drink at the unassuming bar the Rolling Stones immortalized in song."},
+
+    {c:"nature",n:"Shadmoor State Park",t:"BLUFFS",d:"Short woodland walk past old bunkers opens onto dramatic ocean bluffs. One of the only spots with native prickly-pear cactus and wild beach roses."},
+    {c:"nature",n:"Hither Hills State Park",t:"BEACH",d:"Hiking trails, dunes and a wide, often-empty beach. A local favorite for its quiet."},
+    {c:"nature",n:"Montauk Point State Park",t:"SEALS",d:"The grounds around the lighthouse: rocky and sandy shoreline, great walking, and seal-spotting in the colder months."},
+    {c:"nature",n:"Andy Warhol Preserve",t:"TRAILS",d:"15 wild oceanfront acres Warhol's estate donated to the Peconic Land Trust. Quiet moorland paths."},
+    {c:"nature",n:"Theodore Roosevelt County Park",t:"BIRDS",d:"Maritime forest around Big Reed Pond — a major migratory bird corridor and home to historic Third House."},
+    {c:"nature",n:"Deep Hollow Ranch",t:"EST. 1658",d:"America's oldest cattle ranch. Book a horseback ride along the beach and through the moors."},
+    {c:"nature",n:"Moorland in bloom",t:"FLOWERS",d:"In late spring/summer the rolling moors bloom with beach plum, bayberry, shadbush and wild rosa rugosa — Montauk's wild garden."},
+
+    {c:"food",n:"Gosman's Dock",t:"WATERFRONT",d:"Century-old harbor cluster. The casual Clam Bar (order at the window) is classic; adults-only Topside upstairs has the best views."},
+    {c:"food",n:"Duryea's",t:"SUNSET",d:"Pricey but iconic. The famous lobster Cobb is built to share, and the deck over Fort Pond Bay at sunset is magic."},
+    {c:"food",n:"The Lobster Roll (\u201cLUNCH\u201d)",t:"CLASSIC",d:"A roadside Hamptons institution in Amagansett you'll pass on the way in. Cold or hot-buttered roll."},
+    {c:"food",n:"Clam Bar at Napeague",t:"SHACK",d:"Beloved umbrella-shaded roadside clam shack on the drive out. Pure summer."},
+    {c:"food",n:"Navy Beach",t:"IN THE SAND",d:"Dine with your feet near the sand on Fort Pond Bay. Another top sunset table."},
+    {c:"food",n:"Montauk Brewing Co.",t:"BREWERY",d:"Locally founded craft brewery right in town. Ask for the Wave Chaser."},
+    {c:"food",n:"Montauk Bake Shoppe",t:"BREAKFAST",d:"Best morning stop in town — the fried jelly croissant and the 'cruffin' have a cult following."},
+    {c:"food",n:"Inlet Seafood",t:"LOCAL",d:"Owned by six local commercial fishermen. Great sushi and lobster rolls with water views — score the second level."},
+
+    {c:"do",n:"Fishing charter",t:"THE FLEET",d:"Half-day party boats welcome first-timers: try the Viking Fleet, Lazy Bones or Oh Brother."},
+    {c:"do",n:"Surf at Ditch Plains",t:"SURF",d:"Montauk's legendary break. Take a beginner lesson, or just watch from the sand with the Ditch Witch truck nearby."},
+    {c:"do",n:"Stroll Main Street",t:"SHOPS",d:"Wander the mom-and-pop shops and pick up the obligatory 'The End' sweatshirt."},
+    {c:"do",n:"Whale & seal watch",t:"WILDLIFE",d:"The Viking Fleet runs wildlife cruises out of the harbor — whales offshore, seals on the rocks in winter."}
+  ];
+
+  const filtersEl=document.getElementById('filters'),gridEl=document.getElementById('grid'),countEl=document.getElementById('count');
+  let active="all";
+  const filterDefs=[["all","All 26"]].concat(Object.entries(cats).map(([k,v])=>[k,v.label]));
+  filterDefs.forEach(([key,label])=>{
+    const b=document.createElement('button');
+    b.className='chip';b.textContent=label;b.setAttribute('aria-pressed',key==='all'?'true':'false');
+    b.addEventListener('click',()=>{active=key;
+      filtersEl.querySelectorAll('.chip').forEach(c=>c.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');render();});
+    filtersEl.appendChild(b);
+  });
+  function render(){
+    const list=places.filter(p=>active==='all'||p.c===active);
+    countEl.textContent=`Showing ${list.length} ${active==='all'?'places':cats[active].label.toLowerCase()}`;
+    gridEl.innerHTML=list.map(p=>{
+      const col=cats[p.c].color;
+      return `<article class="card" style="--cat:${col}">
+        <span class="ct">${cats[p.c].label}</span>
+        <h4>${p.n}</h4><p>${p.d}</p><span class="tag">${p.t}</span></article>`;
+    }).join('');
+  }
+  render();
+</script>
+</body>
+</html>
